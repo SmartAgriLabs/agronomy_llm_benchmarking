@@ -9,7 +9,9 @@ import glob
 import matplotlib.pyplot as plt
 
 
-import private_utils
+# import private_utils
+import sma_utils
+
 
 load_dotenv() 
 
@@ -167,6 +169,10 @@ def run_benchmark(model_id, benchmark_questions_file, prompts, benchmark_results
                 elif model_creator == "gbstox":
                     pod_url = "https://6lgv5h2aextq69-5000.proxy.runpod.net/v1/chat/completions"
                     temp_answer = private_utils.runpod_chat_prompt(pod_url, model_id, formatted_prompts)
+                elif model_creator == "smartagrilabs":
+                    url = "https://agquestion.com//answer_question"
+                    api_key = api_key=os.environ['CENTEOTL_API_KEY']
+                    temp_answer = sma_utils.query_centeotl(formatted_prompts=formatted_prompts, url=url, api_key=api_key)
                 else:
                     client = openai.OpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.environ['OPENROUTER_API_KEY'])
                     temp_answer = chat_prompt(client, model_id, formatted_prompts)
@@ -371,7 +377,8 @@ model_ids = [
     #"perplexity/llama-3.1-sonar-huge-128k-online",
     #"pratik/llama3-8b-dhenu-0.1",
     #"qwen/qwen-2-72b-instruct",
-    #"teknium/openhermes-2.5-mistral-7b"
+    #"teknium/openhermes-2.5-mistral-7b",
+    "smartagrilabs/centeotl",
 ]
 
 
